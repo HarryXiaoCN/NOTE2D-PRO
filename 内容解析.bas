@@ -15,6 +15,10 @@ Private Function 节点重置(i)
     新节点.坐标 = 点(i).坐标
     新节点.颜色 = 点(i).颜色
     新节点.大小 = 点(i).大小
+    新节点.阈值 = 点(i).阈值
+    新节点.索引 = 点(i).索引
+    新节点.不应 = 点(i).不应
+    新节点.编辑界面偏移 = 点(i).编辑界面偏移
     点(i) = 新节点
 End Function
 Private Function 节点内容初始化解析_子函数(行, 节点号)
@@ -36,8 +40,22 @@ Private Function 节点内容初始化解析_子函数(行, 节点号)
             点(节点号).阈值.上限 = Val(Split(行, " ")(1))
         Case "下限", "XX"
             点(节点号).阈值.下限 = Val(Split(行, " ")(1))
+        Case "输出上限", "SCSX"
+            点(节点号).阈值.输出上限 = Val(Split(行, " ")(1))
+        Case "输出下限", "SCXX"
+            点(节点号).阈值.输出下限 = Val(Split(行, " ")(1))
         Case "常", "C"
             点(节点号).常量 = True
+        Case "不应期", "BYQ", "B"
+            点(节点号).不应.期 = Val(Split(行, " ")(1))
+        Case "不应位", "BYW", "W"
+            点(节点号).不应.位 = Val(Split(行, " ")(1))
+        Case "不应导向", "BYDX", "BD"
+            点(节点号).不应.去 = Split(行, " ")(1)
+        Case "低限导向", "低导", "DXDX", "DD"
+            点(节点号).阈值.低限导向 = Split(行, " ")(1)
+        Case "超限导向", "超导", "CXDX", "CD"
+            点(节点号).阈值.超限导向 = Split(行, " ")(1)
     End Select
 Er:
 End Function

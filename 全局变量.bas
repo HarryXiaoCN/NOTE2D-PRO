@@ -3,6 +3,16 @@ Public Type 阀值
     '当下限>上限时，所有信息都将通过该节点
     下限 As Double '包含该值
     上限 As Double
+    低限导向 As String
+    超限导向 As String
+    输出下限 As Double
+    输出上限 As Double
+    End Type
+
+Public Type 不应周期
+    位 As Long '每触发一次信号接入，如果为0，则触发运算且变为不应期长度，不为0则减1不触发运算
+    期 As Long
+    去 As String
     End Type
     
 Public Type 二维坐标
@@ -12,12 +22,14 @@ Public Type 二维坐标
     
 Public Type 节点
     名字 As String
+    索引 As Long
     内容 As String '存在节点内的规则
     权值 As Double '节点的权值
     流值 As Double '仅常量使用
     大小 As Single
     常量 As Boolean  '如果该节点是常量则不会被改变值，但仍然可以传递运算值
     阈值 As 阀值
+    不应 As 不应周期
     运算 As String ' +-*/ 四种基本运算
     颜色 As Long
     信息流 As String '记载着信息经过的所有节点名字

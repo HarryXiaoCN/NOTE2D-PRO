@@ -247,6 +247,7 @@ Begin VB.Form 体
          _ExtentX        =   5318
          _ExtentY        =   5953
          _Version        =   393217
+         Enabled         =   -1  'True
          ScrollBars      =   2
          BulletIndent    =   4
          Appearance      =   0
@@ -514,10 +515,11 @@ Begin VB.Form 体
             _ExtentX        =   5318
             _ExtentY        =   5530
             _Version        =   393217
+            Enabled         =   -1  'True
             ScrollBars      =   2
             BulletIndent    =   4
             Appearance      =   0
-            TextRTF         =   $"主界面.frx":009D
+            TextRTF         =   $"主界面.frx":01EF
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "楷体"
                Size            =   9
@@ -575,9 +577,14 @@ Private Sub Form_Load()
         .Height = 60000: .Width = 60000
     End With
     节点默认前缀 = "d"
+    节点默认内容 = 默认节点内容.Text
     颜色(9).BackColor = 初始节点颜色
     默认色(9).BackColor = 初始节点颜色
     默认色_Click 9
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    End
 End Sub
 
 Private Sub 编辑界面关闭时钟_Timer()
@@ -594,7 +601,7 @@ Private Sub 绘制时钟_Timer()
         绘制节点 面
         绘制源点 面
         绘制时钟计时器 = Format(Timer - 绘制时钟计时器, "0.000") * 1000
-        Debug.Print 绘制时钟计时器
+'        Debug.Print 绘制时钟计时器
         If 绘制时钟.Interval <= 绘制时钟计时器 Then
             绘制时钟.Interval = 绘制时钟计时器 + 10
         ElseIf 绘制时钟.Interval >= 绘制时钟计时器 + 15 Then
@@ -723,7 +730,7 @@ Private Sub 面_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As 
                             绘制需求 = True
                         End If
                     End With
-                Else
+                ElseIf 面移动初始位置.X <> 0 And 面移动初始位置.Y <> 0 Then
                     面.Top = 面.Top + Y - 面移动初始位置.Y
                     面.Left = 面.Left + X - 面移动初始位置.X
                 End If

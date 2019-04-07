@@ -1,27 +1,30 @@
 Attribute VB_Name = "全局函数"
 Public Function 新建点(X, Y, Optional N As String)
     Dim 节点名缓存 As String
-    If N = "" Then
-        节点名缓存 = 节点默认前缀 & UBound(点)
-    Else
-        节点名缓存 = N
-    End If
-    If 节点名重复性检测(节点名缓存, UBound(点)) = False Then
-        With 点(UBound(点))
-            .名字 = 节点名缓存
-            .大小 = 100
-            .内容 = 节点默认内容
-            .坐标.X = X: .坐标.Y = Y
-            .颜色 = 节点默认颜色
-            .编辑界面偏移.X = 节点编辑界面横偏移长度
-            .编辑界面偏移.Y = 节点编辑界面纵偏移长度
-        End With
-        绘制需求 = True
-        ReDim Preserve 点(UBound(点) + 1)
-    Else
-        节点名缓存 = InputBox("自动生成节点名已存在，请指定新节点名字：", "新建点", 节点名缓存)
-        新建点 X, Y, 节点名缓存
-    End If
+    On Error GoTo Er
+        If N = "" Then
+            节点名缓存 = 节点默认前缀 & UBound(点)
+        Else
+            节点名缓存 = N
+        End If
+        If 节点名重复性检测(节点名缓存, UBound(点)) = False Then
+            With 点(UBound(点))
+                .名字 = 节点名缓存
+                .大小 = 100
+                .索引 = UBound(点)
+                .内容 = 节点默认内容
+                .坐标.X = X: .坐标.Y = Y
+                .颜色 = 节点默认颜色
+                .编辑界面偏移.X = 节点编辑界面横偏移长度
+                .编辑界面偏移.Y = 节点编辑界面纵偏移长度
+            End With
+            绘制需求 = True
+            ReDim Preserve 点(UBound(点) + 1)
+        Else
+            节点名缓存 = InputBox("自动生成节点名已存在，请指定新节点名字：", "新建点", 节点名缓存)
+            新建点 X, Y, 节点名缓存
+        End If
+Er:
 End Function
 
 Public Function 字符串转整数表(目标表, 表, 分割符)
