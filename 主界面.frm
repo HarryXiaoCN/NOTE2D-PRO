@@ -28,9 +28,9 @@ Begin VB.Form 体
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H80000008&
-      Height          =   4335
+      Height          =   4935
       Left            =   0
-      ScaleHeight     =   4305
+      ScaleHeight     =   4905
       ScaleWidth      =   3240
       TabIndex        =   17
       Top             =   0
@@ -238,16 +238,15 @@ Begin VB.Form 体
          Width           =   150
       End
       Begin RichTextLib.RichTextBox 默认节点内容 
-         Height          =   3375
+         Height          =   3975
          Left            =   120
          TabIndex        =   32
          ToolTipText     =   "按F2弹出内容解析编码帮助"
          Top             =   840
          Width           =   3015
          _ExtentX        =   5318
-         _ExtentY        =   5953
+         _ExtentY        =   7011
          _Version        =   393217
-         Enabled         =   -1  'True
          ScrollBars      =   2
          BulletIndent    =   4
          Appearance      =   0
@@ -515,11 +514,10 @@ Begin VB.Form 体
             _ExtentX        =   5318
             _ExtentY        =   5530
             _Version        =   393217
-            Enabled         =   -1  'True
             ScrollBars      =   2
             BulletIndent    =   4
             Appearance      =   0
-            TextRTF         =   $"主界面.frx":01EF
+            TextRTF         =   $"主界面.frx":0254
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "楷体"
                Size            =   9
@@ -775,8 +773,8 @@ Private Sub 区域检测时钟_Timer()
             If i >= 0 Then
                 编辑界面关闭时钟.Enabled = False
                 节点编辑界面显示 i
-            Else
-                编辑界面关闭时钟.Enabled = True
+'            Else
+'                编辑界面关闭时钟.Enabled = True
             End If
         End With
     End If

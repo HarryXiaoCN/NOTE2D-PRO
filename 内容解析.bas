@@ -18,6 +18,7 @@ Private Function 节点重置(i)
     新节点.阈值 = 点(i).阈值
     新节点.索引 = 点(i).索引
     新节点.不应 = 点(i).不应
+    新节点.自锁 = 点(i).自锁
     新节点.编辑界面偏移 = 点(i).编辑界面偏移
     点(i) = 新节点
 End Function
@@ -48,6 +49,10 @@ Private Function 节点内容初始化解析_子函数(行, 节点号)
             点(节点号).常量 = True
         Case "不应期", "BYQ", "B"
             点(节点号).不应.期 = Val(Split(行, " ")(1))
+        Case "应期", "YQ", "YB", "Y"
+            点(节点号).不应.常 = Val(Split(行, " ")(1))
+        Case "应期位", "YQW", "YW"
+            点(节点号).不应.常位 = Val(Split(行, " ")(1))
         Case "不应位", "BYW", "W"
             点(节点号).不应.位 = Val(Split(行, " ")(1))
         Case "不应导向", "BYDX", "BD"
@@ -56,6 +61,8 @@ Private Function 节点内容初始化解析_子函数(行, 节点号)
             点(节点号).阈值.低限导向 = Split(行, " ")(1)
         Case "超限导向", "超导", "CXDX", "CD"
             点(节点号).阈值.超限导向 = Split(行, " ")(1)
+        Case "自锁次", "次", "ZSC", "ZS"
+            点(节点号).自锁.次 = Val(Split(行, " ")(1))
     End Select
 Er:
 End Function

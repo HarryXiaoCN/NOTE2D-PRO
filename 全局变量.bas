@@ -12,9 +12,15 @@ Public Type 阀值
 Public Type 不应周期
     位 As Long '每触发一次信号接入，如果为0，则触发运算且变为不应期长度，不为0则减1不触发运算
     期 As Long
+    常 As Long
+    常位 As Long
     去 As String
     End Type
-    
+
+Public Type 锁
+    次 As Long '能够触发的最大有效次
+    End Type
+
 Public Type 二维坐标
     X As Single
     Y As Single
@@ -23,6 +29,7 @@ Public Type 二维坐标
 Public Type 节点
     名字 As String
     索引 As Long
+    激活数 As Long
     内容 As String '存在节点内的规则
     权值 As Double '节点的权值
     流值 As Double '仅常量使用
@@ -30,6 +37,7 @@ Public Type 节点
     常量 As Boolean  '如果该节点是常量则不会被改变值，但仍然可以传递运算值
     阈值 As 阀值
     不应 As 不应周期
+    自锁 As 锁
     运算 As String ' +-*/ 四种基本运算
     颜色 As Long
     信息流 As String '记载着信息经过的所有节点名字
