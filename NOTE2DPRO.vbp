@@ -1,6 +1,6 @@
 Type=Exe
 Form=主界面.frm
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Module=全局变量; 全局变量.bas
 Module=绘画函数; 绘画函数.bas
 Module=全局函数; 全局函数.bas
@@ -9,6 +9,7 @@ Module=全局常量; 全局常量.bas
 Module=内容解析; 内容解析.bas
 Module=流动; 流动.bas
 Module=编辑辅助; 编辑辅助.bas
+Module=命令系统; 命令系统.bas
 IconForm="体"
 Startup="体"
 HelpFile=""

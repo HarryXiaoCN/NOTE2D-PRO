@@ -8,12 +8,76 @@ Begin VB.Form 体
    ClientHeight    =   8880
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   18000
+   ClientWidth     =   18015
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   8880
-   ScaleWidth      =   18000
+   ScaleWidth      =   18015
    StartUpPosition =   2  '屏幕中心
+   Begin VB.PictureBox 控制台容器 
+      Appearance      =   0  'Flat
+      AutoRedraw      =   -1  'True
+      BackColor       =   &H00FFFFC0&
+      BeginProperty Font 
+         Name            =   "微软雅黑"
+         Size            =   10.5
+         Charset         =   134
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   5055
+      Left            =   11160
+      ScaleHeight     =   5025
+      ScaleWidth      =   6825
+      TabIndex        =   33
+      ToolTipText     =   "“~”键隐藏/显示本界面"
+      Top             =   0
+      Width           =   6855
+      Begin VB.TextBox 命令输入框 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "微软雅黑"
+            Size            =   10.5
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   120
+         TabIndex        =   34
+         Top             =   120
+         Width           =   6615
+      End
+      Begin RichTextLib.RichTextBox 命令提示框 
+         Height          =   3975
+         Left            =   120
+         TabIndex        =   35
+         Top             =   840
+         Width           =   6615
+         _ExtentX        =   11668
+         _ExtentY        =   7011
+         _Version        =   393217
+         ScrollBars      =   2
+         BulletIndent    =   4
+         Appearance      =   0
+         TextRTF         =   $"主界面.frx":0000
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "楷体"
+            Size            =   9
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
    Begin VB.PictureBox 节点编辑辅助 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
@@ -28,9 +92,9 @@ Begin VB.Form 体
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H80000008&
-      Height          =   4935
+      Height          =   5655
       Left            =   0
-      ScaleHeight     =   4905
+      ScaleHeight     =   5625
       ScaleWidth      =   3240
       TabIndex        =   17
       Top             =   0
@@ -238,19 +302,19 @@ Begin VB.Form 体
          Width           =   150
       End
       Begin RichTextLib.RichTextBox 默认节点内容 
-         Height          =   3975
+         Height          =   4455
          Left            =   120
          TabIndex        =   32
          ToolTipText     =   "按F2弹出内容解析编码帮助"
-         Top             =   840
+         Top             =   960
          Width           =   3015
          _ExtentX        =   5318
-         _ExtentY        =   7011
+         _ExtentY        =   7858
          _Version        =   393217
          ScrollBars      =   2
          BulletIndent    =   4
          Appearance      =   0
-         TextRTF         =   $"主界面.frx":0000
+         TextRTF         =   $"主界面.frx":009D
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "楷体"
             Size            =   9
@@ -315,9 +379,9 @@ Begin VB.Form 体
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H80000008&
-         Height          =   4095
+         Height          =   4215
          Left            =   6240
-         ScaleHeight     =   4065
+         ScaleHeight     =   4185
          ScaleWidth      =   3225
          TabIndex        =   3
          Top             =   1440
@@ -517,7 +581,7 @@ Begin VB.Form 体
             ScrollBars      =   2
             BulletIndent    =   4
             Appearance      =   0
-            TextRTF         =   $"主界面.frx":0254
+            TextRTF         =   $"主界面.frx":0333
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "楷体"
                Size            =   9
@@ -555,16 +619,37 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private 节点编辑初始位置 As 二维坐标, 节点移动初始位置 As 二维坐标, 面移动初始位置 As 二维坐标
+Private 节点编辑初始位置 As 二维坐标, 节点移动初始位置 As 二维坐标, 面移动初始位置 As 二维坐标, 控制台初始位置 As 二维坐标
+Private 节点默认编辑初始位置 As 二维坐标
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     Select Case KeyCode
         Case 27
             节点编辑界面.Visible = False
-        Case vbKeyReturn
+        Case vbKeyF1
+            初始化全部节点
+        Case vbKeyF5
             启动流 启动节点
         Case vbKeyF2
             MsgBox 编码规则提示初始化, 32, "节点内容编码帮助"
+        Case vbKeyReturn
+            If 命令输入框.Text <> "" Then 命令输入 命令输入框, 命令提示框
+        Case 192
+            If 控制台容器.Visible Then 控制台容器.Visible = False Else 控制台容器.Visible = True
+    End Select
+End Sub
+
+Private Function 初始化全部节点()
+    Dim i As Long
+    For i = 0 To UBound(点) - 1
+        节点内容初始化解析 点(i).内容, i
+    Next
+End Function
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+    Select Case KeyAscii
+        Case vbKeyReturn
+            KeyAscii = 0
     End Select
 End Sub
 
@@ -615,6 +700,17 @@ Public Function 绘制周期()
     绘制源点 面
 End Function
 
+Private Sub 节点编辑辅助_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button > 0 Then
+        节点编辑辅助.Top = Y - 节点默认编辑初始位置.Y + 节点编辑辅助.Top
+        节点编辑辅助.Left = X - 节点默认编辑初始位置.X + 节点编辑辅助.Left
+    End If
+End Sub
+
+Private Sub 节点编辑辅助_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    节点默认编辑初始位置.X = X: 节点默认编辑初始位置.Y = Y
+End Sub
+
 Private Sub 节点编辑界面_GotFocus()
     编辑界面关闭时钟.Enabled = False
 End Sub
@@ -661,6 +757,17 @@ End Sub
 
 Private Sub 节点内容_GotFocus()
     节点编辑界面_GotFocus
+End Sub
+
+Private Sub 控制台容器_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    控制台初始位置.X = X: 控制台初始位置.Y = Y
+End Sub
+
+Private Sub 控制台容器_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button > 0 Then
+        控制台容器.Top = Y - 控制台初始位置.Y + 控制台容器.Top
+        控制台容器.Left = X - 控制台初始位置.X + 控制台容器.Left
+    End If
 End Sub
 
 Private Sub 面_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)

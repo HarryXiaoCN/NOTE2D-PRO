@@ -19,9 +19,25 @@ Private Function 节点重置(i)
     新节点.索引 = 点(i).索引
     新节点.不应 = 点(i).不应
     新节点.自锁 = 点(i).自锁
+    新节点.遗忘 = 点(i).遗忘
     新节点.编辑界面偏移 = 点(i).编辑界面偏移
     点(i) = 新节点
 End Function
+
+Private Function 节点内容初始化解析_子函数_随机赋值(行, 节点号)
+    Dim 命令() As String, 子命令() As String
+    命令 = Split(行, " ")
+    Select Case UCase(命令(1))
+        Case "R", "随机数", "SJS", "SJ", "S", "RND"
+            子命令 = Split(命令(2), ",")
+            Randomize Val(子命令(0))
+            点(节点号).权值 = Rnd * Val(子命令(1)) + Val(子命令(2))
+        Case Else
+            点(节点号).权值 = Val(命令(1))
+    End Select
+    点(节点号).遗忘.原值 = 点(节点号).权值
+End Function
+
 Private Function 节点内容初始化解析_子函数(行, 节点号)
     Dim 行头 As String
     On Error GoTo Er
@@ -34,7 +50,7 @@ Private Function 节点内容初始化解析_子函数(行, 节点号)
         Case "去", "Q", "QU"
             点(节点号).去 = Split(行, " ")(1)
         Case "值", "Z"
-            点(节点号).权值 = Val(Split(行, " ")(1))
+            节点内容初始化解析_子函数_随机赋值 行, 节点号
         Case "算", "S"
             点(节点号).运算 = Split(行, " ")(1)
         Case "上限", "SX"
@@ -47,13 +63,19 @@ Private Function 节点内容初始化解析_子函数(行, 节点号)
             点(节点号).阈值.输出下限 = Val(Split(行, " ")(1))
         Case "常", "C"
             点(节点号).常量 = True
+        Case "遗忘期", "YWQ"
+            点(节点号).遗忘.期 = Val(Split(行, " ")(1))
+        Case "遗忘位", "YWW"
+            点(节点号).遗忘.位 = Val(Split(行, " ")(1))
+        Case "常", "C"
+            点(节点号).常量 = True
         Case "不应期", "BYQ", "B"
             点(节点号).不应.期 = Val(Split(行, " ")(1))
         Case "应期", "YQ", "YB", "Y"
             点(节点号).不应.常 = Val(Split(行, " ")(1))
-        Case "应期位", "YQW", "YW"
+        Case "应期位", "YQW"
             点(节点号).不应.常位 = Val(Split(行, " ")(1))
-        Case "不应位", "BYW", "W"
+        Case "不应位", "BYW"
             点(节点号).不应.位 = Val(Split(行, " ")(1))
         Case "不应导向", "BYDX", "BD"
             点(节点号).不应.去 = Split(行, " ")(1)

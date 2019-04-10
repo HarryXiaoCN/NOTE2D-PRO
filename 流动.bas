@@ -76,6 +76,13 @@ Public Function 节点流汇入运算(源值, 去点 As 节点)
     If 去点.常量 Then
         去点.流值 = 运算(源值, 去点.权值, 去点.运算)
     Else
+        If 去点.遗忘.期 > 0 Then
+            If 去点.遗忘.位 <= 0 Then
+                去点.权值 = 去点.遗忘.原值
+                去点.遗忘.位 = 去点.遗忘.期
+            End If
+            去点.遗忘.位 = 去点.遗忘.位 - 1
+        End If
         去点.权值 = 运算(源值, 去点.权值, 去点.运算)
     End If
 End Function
@@ -107,6 +114,10 @@ Public Function 运算(a, b, f) As Double
                 运算 = a
             Case "=="
                 运算 = b
+            Case "^"
+                运算 = b ^ a
+            Case "^^"
+                运算 = a ^ b
         End Select
 Er:
 End Function

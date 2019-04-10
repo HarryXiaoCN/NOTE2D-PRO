@@ -17,6 +17,12 @@ Public Type 不应周期
     去 As String
     End Type
 
+Public Type 遗忘周期
+    原值 As Double
+    期 As Long
+    位 As Long
+    End Type
+
 Public Type 锁
     次 As Long '能够触发的最大有效次
     End Type
@@ -34,6 +40,7 @@ Public Type 节点
     权值 As Double '节点的权值
     流值 As Double '仅常量使用
     大小 As Single
+    遗忘 As 遗忘周期
     常量 As Boolean  '如果该节点是常量则不会被改变值，但仍然可以传递运算值
     阈值 As 阀值
     不应 As 不应周期
