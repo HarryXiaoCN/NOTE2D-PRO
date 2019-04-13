@@ -3,12 +3,9 @@ Public Function 绘制连接(绘制面)
     Dim i As Long
     For i = 0 To UBound(点) - 1
         With 点(i)
-            If .去 <> "" Or .阈值.超限导向 <> "" Or .阈值.低限导向 <> "" Then
+            If .去 <> "" Then
                 绘制面.ForeColor = .颜色
-                绘制连接_子函数 绘制面, .不应.去, i, 1, 不应导连接符号
-                绘制连接_子函数 绘制面, .阈值.低限导向, i, 1, 低导连接符号
-                绘制连接_子函数 绘制面, .去, i
-                绘制连接_子函数 绘制面, .阈值.超限导向, i, 1, 超导连接符号
+                绘制连接_子函数 绘制面, 点(i), i
             End If
         End With
     Next
@@ -20,32 +17,19 @@ Public Function 二维坐标求中运算(a As 二维坐标, b As 二维坐标, 中分) As 二维坐标
     二维坐标求中运算.Y = (b.Y - a.Y) * 中分 + a.Y
 End Function
 
-Private Function 绘制连接_子函数(绘制面, 去, 本, Optional 线宽 As Long = 2, Optional 线意 As String)
+Private Function 绘制连接_子函数(绘制面, 去点 As 节点, 本, Optional 线宽 As Long = 2)
     Dim 中点 As 二维坐标, 去缓存() As Long, i As Long
-    去缓存 = 绘制连接_子函数_节点名转索引序(去)
-    For i = 0 To UBound(去缓存)
-        If 去缓存(i) < UBound(点) And 去缓存(i) >= 0 Then
-            中点 = 二维坐标求中运算(点(本).坐标, 点(去缓存(i)).坐标, 0.67)
-'            中点.X = (点(去缓存(i)).坐标.X - 点(本).坐标.X) / 3 * 2 + 点(本).坐标.X
-'            中点.Y = (点(去缓存(i)).坐标.Y - 点(本).坐标.Y) / 3 * 2 + 点(本).坐标.Y
-            If 线意 <> "" Then
-                绘制面.CurrentX = 中点.X
-                绘制面.CurrentY = 中点.Y
-                Select Case 线意
-                    Case 低导连接符号
-                        绘制面.Print 线意 & "<" & 点(本).阈值.下限
-                    Case 超导连接符号
-                        绘制面.Print 线意 & ">" & 点(本).阈值.上限
-                    Case 不应导连接符号
-                        绘制面.Print 线意
-                End Select
+    With 去点
+        For i = 0 To UBound(.去缓存)
+            If .去缓存(i) < UBound(点) And .去缓存(i) >= 0 Then
+                中点 = 二维坐标求中运算(点(本).坐标, 点(.去缓存(i)).坐标, 0.67)
+                绘制面.DrawWidth = 线宽
+                绘制面.Line (点(本).坐标.X, 点(本).坐标.Y)-(中点.X, 中点.Y), 点(本).颜色
+                绘制面.DrawWidth = 1
+                绘制面.Line (中点.X, 中点.Y)-(点(.去缓存(i)).坐标.X, 点(.去缓存(i)).坐标.Y), 点(.去缓存(i)).颜色
             End If
-            绘制面.DrawWidth = 线宽
-            绘制面.Line (点(本).坐标.X, 点(本).坐标.Y)-(中点.X, 中点.Y), 点(本).颜色
-            绘制面.DrawWidth = 1
-            绘制面.Line (中点.X, 中点.Y)-(点(去缓存(i)).坐标.X, 点(去缓存(i)).坐标.Y), 点(去缓存(i)).颜色
-        End If
-    Next
+        Next
+    End With
 End Function
 
 Public Function 绘制连接_子函数_节点名转索引序(ByVal 去串) As Variant
@@ -108,20 +92,6 @@ Public Function 绘制节点(绘制面)
             绘制面.CurrentX = .坐标.X + 节点名绘制横偏移长度
             绘制面.CurrentY = .坐标.Y + 节点名绘制纵偏移长度
             绘制面.Print .名字 & "=" & .权值
-            绘制面.CurrentX = .坐标.X + 节点运算符横偏移长度
-            绘制面.CurrentY = .坐标.Y + 节点运算符纵偏移长度
-            绘制面.Print .运算
-            绘制面.CurrentX = .坐标.X + 节点序号横偏移长度
-            绘制面.CurrentY = .坐标.Y + 节点序号纵偏移长度
-            绘制面.Print .索引 & " 遗忘:" & .遗忘.位 & "/" & .遗忘.期 & " 常应:" & .不应.常位 & "/" & .不应.常
-            绘制面.CurrentX = .坐标.X + 节点序号横偏移长度
-            绘制面.CurrentY = .坐标.Y + 节点序号纵偏移长度 + 250
-            绘制面.Print "   不应:" & .不应.位 & "/" & .不应.期
-            If .常量 Then
-                绘制面.CurrentX = .坐标.X + 节点流值横偏移长度
-                绘制面.CurrentY = .坐标.Y + 节点流值纵偏移长度
-                绘制面.Print .流值
-            End If
         End With
     Next
     绘制需求 = False
